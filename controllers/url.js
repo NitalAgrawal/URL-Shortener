@@ -1,6 +1,5 @@
 const { nanoid } = require("nanoid");
 const URL = require("../models/url");
-
 async function handleGenerateNewShortURL(req, res) {
 
     if (!req.body || !req.body.redirectURL) {
@@ -9,17 +8,26 @@ async function handleGenerateNewShortURL(req, res) {
         });
     }
 
+    let redirectURL = req.body.redirectURL;
+
+    if (
+        !redirectURL.startsWith("http://") &&
+        !redirectURL.startsWith("https://")
+    ) {
+        redirectURL = "https://" + redirectURL;
+    }
+
     const shortID = nanoid(8);
 
     await URL.create({
-    shortId: shortID,
-    redirectURL: req.body.redirectURL,
-    visitHistory: [],
-});
-   return res.render("home",{
-    id: shortID ,
-   });
-   // return res.json({ id: shortID }); // it returns in the json format 
+        shortId: shortID,
+        redirectURL: redirectURL,
+        visitHistory: [],
+    });
+
+    return res.render("home", {
+        id: shortID,
+    });
 }
 
 async function handleGetAnalytics(req, res) {

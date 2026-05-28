@@ -34,6 +34,24 @@
         </p>
 
     <% } %>
+<h2>All URLs</h2>
 
+<ul>
+
+    <% if (locals.urls) { %>
+
+        <% urls.forEach((url) => { %>
+
+            <li>
+                <a href="http://localhost:8001/url/<%= url.shortId %>">
+                    http://localhost:8001/url/<%= url.shortId %>
+                </a>
+            </li>
+
+        <% }) %>
+
+    <% } %>
+
+</ul>
 </body>
 </html>
