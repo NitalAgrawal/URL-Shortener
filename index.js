@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express")
 const path = require("path")
 const {connectToMongoDB} = require("./connect")
@@ -8,7 +9,7 @@ const URL = require('./models/url')
 const app= express();
 const PORT= 8001;
 
-connectToMongoDB('mongodb+srv://nitalagrawal5_db_user:b7YQfvc06AqqOJoj@cluster0.hwymq3p.mongodb.net/?appName=Cluster0')
+connectToMongoDB(process.env.MONGO_URL)
 .then(() => console.log("MongoDB connected"))
 .catch((err) => console.log("Mongo Error", err))
                      
