@@ -4,6 +4,7 @@ const path = require("path")
 const {connectToMongoDB} = require("./connect")
 const urlRoute = require("./routes/url")
 const staticRouter = require("./routes/staticRouter")
+const userRoute = require('./routes/user')
 
 const URL = require('./models/url')
 const app= express();
@@ -22,6 +23,7 @@ app.use(express.json())    // json data bhi support krenge
 app.use(express.urlencoded({ extended: false })); // or form ka data bhi support krenge 
 
 app.use("/url",urlRoute) ;
+app.use("/user",userRoute) ;
 app.use("/",staticRouter);
 
 app.get("/test", async (req,res)=>{ // server side rendering ka ek option pura html yha likh do ya we have some templating engines like EJS 
