@@ -1,11 +1,12 @@
 require("dotenv").config();
 const express = require("express")
 const path = require("path")
+const cookieParser = require("cookie-parser")
 const {connectToMongoDB} = require("./connect")
 const urlRoute = require("./routes/url")
 const staticRouter = require("./routes/staticRouter")
 const userRoute = require('./routes/user')
-
+const {restrictToLoggedinUserOnly,checkAuth} = require('./middlewares/auth')
 const URL = require('./models/url')
 const app= express();
 const PORT= 8001;
@@ -21,10 +22,11 @@ app.set("views", path.resolve("./views"));
 // Middlewares : jo incoming body ko parse kr ske 
 app.use(express.json())    // json data bhi support krenge  
 app.use(express.urlencoded({ extended: false })); // or form ka data bhi support krenge 
+app.use(cookieParser());
 
-app.use("/url",urlRoute) ;
+app.use("/url",restrictToLoggedinUserOnly,urlRoute) ;
 app.use("/user",userRoute) ;
-app.use("/",staticRouter);
+app.use("/",checkAuth,staticRouter);
 
 app.get("/test", async (req,res)=>{ // server side rendering ka ek option pura html yha likh do ya we have some templating engines like EJS 
     const allUrls= await URL.find({});
