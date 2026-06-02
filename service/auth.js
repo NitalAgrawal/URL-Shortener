@@ -1,16 +1,36 @@
-const { set } = require("mongoose");
+// const { set } = require("mongoose");
+// const sessionIdToUserMap = new Map();
+// function setUser(id,user) {
+//     sessionIdToUserMap.set(id,user);
+// }
+// function getUser(id,user) {
+//     return sessionIdToUserMap.get(id);
+// }
+// module.exports ={
+//     setUser,
+//     getUser
+// }
+const jwt= require("jsonwebtoken");
+const secret="Nital@123";
+function setUser(user) {
 
-const sessionIdToUserMap = new Map();
+   return jwt.sign({
+     _id: user._id,
+     email: user.email,
+   },secret);
 
-function setUser(id,user) {
-    sessionIdToUserMap.set(id,user);
-}
+ }
+ function getUser(token){
+       if(!token) return null;
+       try{
+          return jwt.verify(token, secret);
+       }catch(error){
+        return null;
+       }
 
-function getUser(id,user) {
-    return sessionIdToUserMap.get(id);
-}
-
-module.exports ={
+       
+ }
+ module.exports ={
     setUser,
-    getUser
+    getUser,                             
 }
