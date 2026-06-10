@@ -33,11 +33,12 @@ async function handleUserLogin(req,res){
 
     console.log("Generated Token:", token);
 
-    res.cookie("uid", token);
-
+    // res.cookie("uid", token);
+ 
     console.log("Cookie Set Successfully");
 
-    return res.redirect("/");
+    //return res.redirect("/");
+    return res.json({token});
 }
 module.exports={
     handleUserSignup,
