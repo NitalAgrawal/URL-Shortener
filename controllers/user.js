@@ -31,14 +31,14 @@ async function handleUserLogin(req,res){
 
     const token = setUser(user);
 
-    console.log("Generated Token:", token);
+    // console.log("Generated Token:", token);
 
-    // res.cookie("uid", token);
+     res.cookie("token", token);
  
-    console.log("Cookie Set Successfully");
+    // console.log("Cookie Set Successfully");
 
-    //return res.redirect("/");
-    return res.json({token});
+    return res.redirect("/");
+    // return res.json({token});
 }
 module.exports={
     handleUserSignup,

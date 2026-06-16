@@ -6,7 +6,8 @@ const {connectToMongoDB} = require("./connect")
 const urlRoute = require("./routes/url")
 const staticRouter = require("./routes/staticRouter")
 const userRoute = require('./routes/user')
-const {restrictToLoggedinUserOnly,checkAuth} = require('./middlewares/auth')
+const {checkForAuthentication,restrictTo} = require('./middlewares/auth')
+
 const URL = require('./models/url')
 const app= express();
 const PORT= 8001;
@@ -23,10 +24,11 @@ app.set("views", path.resolve("./views"));
 app.use(express.json())    // json data bhi support krenge  
 app.use(express.urlencoded({ extended: false })); // or form ka data bhi support krenge 
 app.use(cookieParser());
+app.use(checkForAuthentication)
 
-app.use("/url",restrictToLoggedinUserOnly,urlRoute) ;
+app.use("/url", restrictTo(["NORMAL","ADMIN"]),urlRoute) ;
 app.use("/user",userRoute) ;
-app.use("/",checkAuth,staticRouter);
+app.use("/",staticRouter);
 
 app.get("/test", async (req,res)=>{ // server side rendering ka ek option pura html yha likh do ya we have some templating engines like EJS 
     const allUrls= await URL.find({});

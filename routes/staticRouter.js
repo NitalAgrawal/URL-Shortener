@@ -1,12 +1,22 @@
 const express= require("express");
 const URL = require("../models/url");
+const { restrictTo } = require("../middlewares/auth");
 const router = express.Router();
 
 console.log("staticRouter.js loaded. URL is:", URL);
 
-router.get('/', async (req,res) => {
+router.get('/admin/urls',restrictTo(['ADMIN']),async (req,res) => {
+    
+  
+    const allurls = await URL.find({})
+    return res.render("home",{
+        urls: allurls,
+    });
+});
+
+router.get('/', restrictTo(["NORMAL","ADMIN"]),async (req,res) => {
     console.log("Root route hit! URL is:", URL, "typeof URL.find:", typeof URL.find);
-    if(!req.user) return res.redirect('/login')
+    // if(!req.user) return res.redirect('/login')
     const allurls = await URL.find({ createdBy: req.user._id})
     return res.render("home",{
         urls: allurls,
